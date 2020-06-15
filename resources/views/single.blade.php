@@ -6,8 +6,8 @@
         <a class="btn btn-primary" href="{{route("characters.index")}}">All Characters</a>
     </div>
     
-    @if (!is_null($character))
-        @if (is_array($character))
+    @if (isset($character))
+        @if (!empty($character))
             <div class="card w-75 mx-auto mb-4">
                 <div class="row no-gutter">
                     <div class="col-md-4">
@@ -41,8 +41,8 @@
         @else
             <div class="row justify-content-center">
                 <div class="col-md-8">
-                    <div class="alert alert-danger" role="alert">
-                        Rate Limit exceeded. please wait for some time!
+                    <div class="alert alert-success" role="alert">
+                        No character found!!!
                     </div>
                 </div>
             </div>
@@ -50,8 +50,8 @@
     @else 
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <div class="alert alert-success" role="alert">
-                    No characters found!
+                <div class="alert alert-danger" role="alert">
+                    {{$error}}
                 </div>
             </div>
         </div>
