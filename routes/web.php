@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::permanentRedirect('/', '/characters');
+
+Route::get('characters', 'Characters@index')->name("characters.index");
+Route::get('/characters/{character}', 'Characters@show')->name("characters.show");
