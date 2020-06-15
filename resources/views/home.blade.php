@@ -2,16 +2,14 @@
 
 @section('content')
 <div class="container">    
-    @if (is_array($characters))
+    @if (isset($pager))
         <div class="w-100 pr-4">
-            @if (!is_null($pager))
-                {{$pager->render()}}
-            @endif
+            {{$pager->render()}}
         </div>
         <br />
         <div class="row w-100 justify-content-center">
-        @if (!empty($characters))
-            @foreach ($characters as $character)
+        @if (!empty($pager->items()))
+            @foreach ($pager->items() as $character)
                 <div class="col-md-3">
                     <div class="card mb-4">
                         <img src="{{$character["image"]}}" class="card-img-top" alt="character {{$character["id"]}}">
@@ -46,7 +44,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="alert alert-success" role="alert">
-                    Rate Limit exceeded. Please wait for some time!
+                    {{$error}}
                 </div>
             </div>
         </div>

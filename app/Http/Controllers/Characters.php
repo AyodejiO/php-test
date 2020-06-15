@@ -16,10 +16,6 @@ class Characters extends Controller
      */
     public function index(Request $request)
     {
-        //
-        $characters = null; // initialize all characters
-        $info = null; // get pagination info
-
         // url params
         $params = [
             "page" => $request->input("page")?? 1,
@@ -31,30 +27,24 @@ class Characters extends Controller
 
         if($response->ok()) {
             //
-            $info =  $response->json()["info"];
-            $characters =  $response->json()["results"];
+            $info =  $response->json()["info"]; // reuqest meta
+            $arr =  $response->json()["results"]; // request data
 
-            $dummyCollection = collect(range(1, $info["count"]));
-            $perPage = round($info["count"]/$info["pages"]);
-
-            $page = $info["next"]? (int) Str::of($info["next"])->after('=')->__toString() : (int) Str::of($info["prev"])->after('=')->__toString();
-            $num = $info["next"]? -1 : 1;
-
-            $path = route("characters.index");
-            $currentPage = $page + $num;
+            $page = $info["next"]? (int) Str::of($info["next"])->after('=')->__toString() : (int) Str::of($info["prev"])->after('=')->__toString(); // get next or prev page
+            $num = $info["next"]? -1 : 1; // number to get current page
 
             $pager = new LengthAwarePaginator(
-                collect($info["count"]), 
-                $info["count"],
-                $perPage, 
-                $currentPage
+                $arr, 
+                $info["count"], //total
+                count($arr), //perPage
+                $page + $num, //currentPage
             );
 
-            $pager->withPath($path);
-            return view("home", ["characters" => $characters, "pager" => $pager]);
+            $pager->withPath(route("characters.index")); // set pagination path
+            return view("home", ["pager" => $pager]);
         };
 
-        return view("home", ["characters" => "Some error occurred", "pager" => null]);
+        return view("home", ["error" => "Some error occurred, please try again later!!!"]);
     }
 
     /**
