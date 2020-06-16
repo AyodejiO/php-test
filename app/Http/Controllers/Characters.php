@@ -59,7 +59,7 @@ class Characters extends Controller
 
         $response = Http::get('https://rickandmortyapi.com/api/character/'.$character);
 
-        if(!$response->ok()) {
+        if($response->ok()) {
             //
             $character =  $response->json();
             return view("single", ["character" => $character]);
